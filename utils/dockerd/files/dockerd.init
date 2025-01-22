@@ -65,7 +65,11 @@ uciadd() {
 		logger -t "dockerd-init" -p notice "Adding interface '${iface}' to network config"
 		uci_quiet add network interface
 		uci_quiet rename network.@interface[-1]="${iface}"
-		uci_quiet set network.@interface[-1].ifname="${device}"
+		if [ -f /www/luci-static/resources/luci.js ]; then 
+      uci_quiet set network.@interface[-1].device="${device}"
+    else
+      uci_quiet set network.@interface[-1].ifname="${device}"
+    fi
 		uci_quiet set network.@interface[-1].proto="none"
 		uci_quiet set network.@interface[-1].auto="0"
 		uci_quiet commit network
